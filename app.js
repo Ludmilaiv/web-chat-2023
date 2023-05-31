@@ -1,8 +1,11 @@
 const createError = require('http-errors');
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 // var path = require('path');
 // var cookieParser = require('cookie-parser');
-// var logger = require('morgan');
+const logger = require('morgan');
+const config = require('./config');
 
 // var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
@@ -13,7 +16,12 @@ const app = express();
 // app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// app.use(logger('dev'));
+const logStream = fs.createWriteStream(
+  path.join(__dirname, 'logs.log'), 
+  { flags: 'a' }
+);
+
+app.use(logger(config.get('log_format'), { stream: logStream }));
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
