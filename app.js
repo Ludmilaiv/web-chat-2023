@@ -3,12 +3,14 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const favicon = require('serve-favicon');
+const expressLayouts = require('express-ejs-layouts');
 // var path = require('path');
 // var cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const config = require('./config');
 
-// var indexRouter = require('./routes/index');
+const indexRouter = require('./routes/index');
+const testRouter = require('./routes/test');
 // var usersRouter = require('./routes/users');
 
 const app = express();
@@ -28,31 +30,16 @@ app.use(logger(config.get('log_format'), { stream: logStream }));
 // app.use(cookieParser());
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(expressLayouts);
+app.set('layout', './layouts/main-layout');
 
-app.get("/test", function (req, res) {
-  res.end("test");
-})
-
-app.get("/", function (req, res) {
-  // res.end("Hello");
-  res.render("index", {
-    title: "Веб-чат",
-    date: (new Date()).toDateString()
-  });
-})
+app.use('/', indexRouter);
+app.use('/test', testRouter);
+// app.use('/users', usersRouter);
 
 app.use("/forbidden", function (req, res, next) {
   next(createError(403, "Ой! Вам сюда нельзя!"));
 })
-
-// app.use(function(req, res) {
-//     res.status(404);
-//     res.send("Страница не найдена. Извините :((")
-// })
-
-
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -70,9 +57,9 @@ app.use(function (err, req, res, next) {
 
   // Особый шаблон для 404
   if (err.status == 404) {
-    res.render('error404');
+    res.render('error404', {layout: './layouts/error-layout'});
   } else {
-    res.render('error');
+    res.render('error', {layout: './layouts/error-layout'});
   }
 });
 

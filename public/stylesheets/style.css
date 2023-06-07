@@ -6,3 +6,13 @@ body {
 a {
   color: #00B7FF;
 }
+
+header, footer {
+  background-color: ghostwhite;
+  padding: 20px;
+}
+
+main {
+  background-color: cornsilk;
+  padding: 20px;
+}
