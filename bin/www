@@ -8,6 +8,7 @@ const app = require('../app');
 const debug = require('debug')('web-chat:server');
 const http = require('http');
 const config = require('../config');
+const mongoose = require('mongoose');
 
 /**
  * Get port from environment and store in Express.
@@ -26,9 +27,17 @@ const server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+main().catch(err => console.log(err));
+
+async function main() {
+  // Сначала подключаемся к БД
+  await mongoose.connect('mongodb://127.0.0.1:27017/webchatdb');
+	console.log('Connected successfully to server');
+  // Потом запускаем сервер
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+}
 
 /**
  * Normalize a port into a number, string, or false.

@@ -11,6 +11,7 @@ const config = require('./config');
 
 const indexRouter = require('./routes/index');
 const testRouter = require('./routes/test');
+const regRouter = require('./routes/reg');
 // var usersRouter = require('./routes/users');
 
 const app = express();
@@ -26,7 +27,7 @@ const logStream = fs.createWriteStream(
 
 app.use(logger(config.get('log_format'), { stream: logStream }));
 // app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -35,6 +36,7 @@ app.set('layout', './layouts/main-layout');
 
 app.use('/', indexRouter);
 app.use('/test', testRouter);
+app.use('/reg', regRouter);
 // app.use('/users', usersRouter);
 
 app.use("/forbidden", function (req, res, next) {
