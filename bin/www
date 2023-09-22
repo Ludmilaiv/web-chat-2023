@@ -31,7 +31,7 @@ main().catch(err => console.log(err));
 
 async function main() {
   // Сначала подключаемся к БД
-  await mongoose.connect('mongodb://127.0.0.1:27017/webchatdb');
+  await mongoose.connect(config.get('db_url'));
 	console.log('Connected successfully to server');
   // Потом запускаем сервер
   server.listen(port);

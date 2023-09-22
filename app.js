@@ -9,10 +9,12 @@ const expressLayouts = require('express-ejs-layouts');
 const logger = require('morgan');
 const config = require('./config');
 
-const indexRouter = require('./routes/index');
+// const indexRouter = require('./routes/index');
+const homeRouter = require('./routes/home-router');
 const testRouter = require('./routes/test');
-const regRouter = require('./routes/reg');
-// var usersRouter = require('./routes/users');
+// const regRouter = require('./routes/reg');
+const userRouter = require('./routes/user-router');
+
 
 const app = express();
 
@@ -34,10 +36,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressLayouts);
 app.set('layout', './layouts/main-layout');
 
-app.use('/', indexRouter);
+app.use('/', homeRouter);
 app.use('/test', testRouter);
-app.use('/reg', regRouter);
-// app.use('/users', usersRouter);
+// app.use('/reg', regRouter);
+app.use('/users', userRouter);
 
 app.use("/forbidden", function (req, res, next) {
   next(createError(403, "Ой! Вам сюда нельзя!"));
